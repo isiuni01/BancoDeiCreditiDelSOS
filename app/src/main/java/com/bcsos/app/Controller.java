@@ -1,0 +1,88 @@
+package com.bcsos.app;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+@SpringBootApplication
+@RestController
+public class Controller {
+	public static void main(String[] args) {
+		SpringApplication.run(Controller.class, args);
+	}
+	
+	public Map<String,String> parseBody(String bodyContent) {
+		Map<String, String> body = new HashMap<String, String>();
+		String[] values = bodyContent.split("&");	//split per '&' sul contenuto del body per ottenere una lista di coppie chiave=valore
+		for (int i = 0; i < values.length; ++i) {
+			String[] coppia = values[i].split("=");	//split per '=' per separare la chiave dal valore corrispondente
+		    if (coppia.length != 2) {
+		    	continue;
+		    } else {
+		    	body.put(coppia[0], coppia[1]);
+		    }
+		  }
+		return body;
+	}
+	
+	@GetMapping("/hello")
+	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+		return String.format("Hello %s!", name);
+	}
+	
+	
+	@GetMapping("/api/account")
+	public void getAllAccounts() {
+	}
+	
+	@RequestMapping(value = "/api/account", method=RequestMethod.POST)
+	public void addAccount(@RequestBody String bodyContent) {
+	}
+	
+	@RequestMapping(value="/api/account", method=RequestMethod.DELETE)
+	public void deleteAccount(@RequestParam String id) {
+	}
+	
+	@GetMapping("/api/account/{accountId}")
+	public void getAccount() {
+		
+	}
+	
+	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.POST)
+	public void operazione(@RequestBody String bodyContent) {
+		
+	}
+	
+	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.PUT)
+	public void updateAccountInformations(@RequestBody String bodyContent) {
+		
+	}
+	
+	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.PATCH)
+	public void updateSingleInformation(@RequestBody String bodyContent) {
+		
+	}
+	
+	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.HEAD)
+	public void getInformazioni() {
+		
+	}
+	
+	@RequestMapping(value="/api/transfer", method=RequestMethod.POST)
+	public void transfer(@RequestBody String bodyContent) {
+		
+	}
+	
+	@RequestMapping(value="/api/divert", method=RequestMethod.POST)
+	public void divert(@RequestBody String bodyContent) {
+		
+	}
+}

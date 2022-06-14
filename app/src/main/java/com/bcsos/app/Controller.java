@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -46,7 +47,7 @@ public class Controller {
 	
 	
 	@GetMapping("/api/account")
-	public String getAllAccounts() {
+	public ConcurrentHashMap<UUID, Account> getAllAccounts() {
 		return AppApplication.bank.getAllAccounts();
 	}
 	

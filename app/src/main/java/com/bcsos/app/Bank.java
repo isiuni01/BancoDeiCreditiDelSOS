@@ -69,14 +69,50 @@ public class Bank implements Serializable {
 		
 	}
 	
+	public String transfer(String a1, String a2,double amount) throws BalanceException{
+		
+		
+		
+		mappa.get(UUID.fromString(a1)).transfer(amount * -1);
+		mappa.get(UUID.fromString(a2)).transfer(amount);
+		
+		Transaction t = new Transaction(UUID.fromString(a1),UUID.fromString(a2),amount);
+		
+		UUID id =  UUID.randomUUID();
+		
+		this.frasco.put(id, t);
+		
+		return id.toString();
+		
 	
+		}
 	
+	public String divert(String transactionId) throws BalanceException {
+		
+		Transaction t = this.frasco.get(UUID.fromString(transactionId));
+		
+		UUID a1 = t.getRecipient();
+		UUID a2 = t.getSender();
+		double amount = t.getAmount();
+		
 	
+		mappa.get(a1).transfer(amount * -1);
+		mappa.get(a2).transfer(amount);
+		
+		 t = new Transaction(a1,a2,amount);
+		 
+		 UUID id = UUID.randomUUID();
+		 
+		 this.frasco.put(id, t);
+		 
+		 return id.toString();
+		
+		
+		
+		
+	}
+		
+		
+		
+	}
 	
-	
-	
-	
-	
-	
-
-}

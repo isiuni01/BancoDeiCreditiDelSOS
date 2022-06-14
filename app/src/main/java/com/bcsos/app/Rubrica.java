@@ -39,7 +39,7 @@ public class Rubrica implements Serializable {
 		
 	}
 	
-	public void remoneAccount(String id) {
+	public void removeAccount(String id) {
 		
 		this.mappa.remove(UUID.fromString(id));
 		

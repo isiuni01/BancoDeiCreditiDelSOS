@@ -4,13 +4,13 @@ public class Account {
 
 	
 	private String name;
-	private String sername;
+	private String surname;
 	private double balance;
 	
 	
-	public Account(String name, String sername) {
+	public Account(String name, String surname) {
 		this.name = name;
-		this.sername = sername;
+		this.surname = surname;
 		this.balance = 0;
 	}
 	
@@ -41,11 +41,11 @@ public class Account {
 	}
 
 	public String getSername() {
-		return sername;
+		return surname;
 	}
 
-	public void setSername(String sername) {
-		this.sername = sername;
+	public void setSername(String surname) {
+		this.surname = surname;
 	}
 	
 	

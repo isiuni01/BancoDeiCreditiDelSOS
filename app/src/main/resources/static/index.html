@@ -61,6 +61,14 @@
 </body>
 <script>
 
+$.ajax({
+    url: '/api/account',
+    
+    type: 'DELETE',
+    success: function(result) {
+    	window.location.reload();
+    }
+});
 
 
 </script>

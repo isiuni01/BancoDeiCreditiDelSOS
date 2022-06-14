@@ -2,6 +2,7 @@ package com.bcsos.app;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -70,7 +71,17 @@ public class Bank implements Serializable {
 	}
 	
 	
-	
+	public String getAllAccounts() {
+		String accounts = "";
+		for (Map.Entry<UUID, Account> entry : mappa.entrySet()) {
+			UUID key = entry.getKey();
+			Account val = entry.getValue();
+			String name = val.getName();
+			String surname = val.getSurname();
+			accounts += key.toString() + name + surname + "\n";
+		}
+		return accounts;
+	}
 	
 	
 	

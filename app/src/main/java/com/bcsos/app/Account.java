@@ -40,11 +40,11 @@ public class Account {
 		this.name = name;
 	}
 
-	public String getSername() {
+	public String getSurname() {
 		return surname;
 	}
 
-	public void setSername(String surname) {
+	public void setSurname(String surname) {
 		this.surname = surname;
 	}
 	

@@ -69,8 +69,8 @@ public class Controller {
 		
 	}
 	
-	@RequestMapping(value="/api/account", method=RequestMethod.DELETE)
-	public void deleteAccount(@RequestParam String accountId) {
+	@RequestMapping(value="/api/{accountId}", method=RequestMethod.DELETE)
+	public void deleteAccount(@PathVariable String accountId) {
 		
 		AppApplication.bank.removeAccount(accountId);
 		
@@ -79,6 +79,8 @@ public class Controller {
 	
 	@GetMapping("/api/account/{accountId}")
 	public Account getAccount(@PathVariable String accountId) {
+		
+		
 		
 		return AppApplication.bank.getAccount(accountId);
 		

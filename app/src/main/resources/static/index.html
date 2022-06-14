@@ -34,7 +34,7 @@
 			
 			for(const element of data)
 			{
-				s = s+"<tr><td>"+element.id+"</td><td>"+element.name+"</td><td>"+element.surname +"</td><td><button Onclick=\"deleteAccount("+element.id+")\">Elimina </button> </td></tr>";
+				s = s+"<tr><td>"+element.id+"</td><td>"+element.name+"</td><td>"+element.surname +"</td><td><button onclick=\"deleteAccount('"+element.id+"')\">Elimina </button> </td></tr>";
 			}
 		
 			document.getElementById("elenco").innerHTML = s;
@@ -61,14 +61,18 @@
 </body>
 <script>
 
-$.ajax({
-    url: '/api/account',
-    
-    type: 'DELETE',
-    success: function(result) {
-    	window.location.reload();
-    }
-});
+function deleteAccount(id)
+{
+	
+    $.ajax({
+        url: '/api/'+id,
+
+        type: 'DELETE',
+        success: function(result) {
+            window.location.reload();
+        }
+    });
+}
 
 
 </script>

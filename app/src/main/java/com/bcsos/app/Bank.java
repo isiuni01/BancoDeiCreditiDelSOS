@@ -35,7 +35,6 @@ public class Bank implements Serializable {
 		
 		return id.toString();
 		
-		
 	}
 	
 	public void removeAccount(String id) {

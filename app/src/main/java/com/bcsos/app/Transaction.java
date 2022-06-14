@@ -32,6 +32,12 @@ public class Transaction {
 	public double getAmount() {
 		return amount;
 	}
+
+	public LocalDateTime getDate() {
+		return date;
+	}
+	
+	
 	
 	
 	

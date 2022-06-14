@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class Controller {
 	public static void main(String[] args) {
-		SpringApplication.run(Controller.class, args);
+		//SpringApplication.run(Controller.class, args);
 	}
 	
 	public Map<String,String> parseBody(String bodyContent) {
@@ -47,8 +49,11 @@ public class Controller {
 	
 	
 	@GetMapping("/api/account")
-	public ConcurrentHashMap<UUID, Account> getAllAccounts() {
-		return AppApplication.bank.getAllAccounts();
+	public Object[] getAllAccounts() {
+		
+		Object[] list =  AppApplication.bank.getAllAccounts().values().toArray();
+		
+		return list;
 	}
 	
 	@RequestMapping(value = "/api/account", method=RequestMethod.POST)

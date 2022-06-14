@@ -2,12 +2,12 @@ package com.bcsos.app;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.UUID;
 
 
 public class Transaction {
 	
+	private UUID id;
 	private UUID sender;
 	private UUID recipient;
 	private double amount;
@@ -35,6 +35,14 @@ public class Transaction {
 
 	public LocalDateTime getDate() {
 		return date;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
 	}
 	
 	

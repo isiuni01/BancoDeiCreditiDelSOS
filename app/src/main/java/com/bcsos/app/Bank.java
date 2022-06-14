@@ -31,7 +31,9 @@ public class Bank implements Serializable {
 	{
 		Account c = new Account(name, surname);
 		
+		
 		UUID id = UUID.randomUUID();
+		c.setId(id);
 		
 		this.mappa.put(id, c);
 		
@@ -89,6 +91,7 @@ public class Bank implements Serializable {
 		UUID id =  UUID.randomUUID();
 		
 		this.frasco.put(id, t);
+		t.setId(id);
 		
 		return id.toString();
 		

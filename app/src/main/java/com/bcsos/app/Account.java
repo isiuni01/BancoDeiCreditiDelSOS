@@ -1,8 +1,10 @@
 package com.bcsos.app;
 
+import java.util.UUID;
+
 public class Account {
 
-	
+	private UUID id;
 	private String name;
 	private String surname;
 	private double balance;
@@ -46,6 +48,14 @@ public class Account {
 
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+	
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
 	}
 	
 	

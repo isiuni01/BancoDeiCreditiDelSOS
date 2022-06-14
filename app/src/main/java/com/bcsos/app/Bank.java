@@ -10,10 +10,12 @@ public class Bank implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private ConcurrentHashMap<UUID, Account> mappa;
+	private ConcurrentHashMap<UUID, Transaction> frasco;
 	
 	public Bank()
 	{
 		this.mappa = new ConcurrentHashMap<UUID, Account>();
+		this.frasco = new ConcurrentHashMap<UUID, Transaction>();
 	}
 	
 	
@@ -46,7 +48,7 @@ public class Bank implements Serializable {
 	
 	public Account getAccount(String id) {
 		
-		return this.mappa.get(UUID.fromString(id));//va bene cosi o meglio String formattata??
+		return this.mappa.get(UUID.fromString(id));
 		
 	}
 	
@@ -66,6 +68,8 @@ public class Bank implements Serializable {
 		c.setSurname(surname);
 		
 	}
+	
+	
 	
 	
 	

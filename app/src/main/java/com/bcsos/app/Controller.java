@@ -1,10 +1,12 @@
 package com.bcsos.app;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +43,8 @@ public class Controller {
 	
 	
 	@GetMapping("/api/account")
-	public void getAllAccounts() {
+	public ArrayList<Account> getAllAccounts() {
+		return AppApplication.a;
 	}
 	
 	@RequestMapping(value = "/api/account", method=RequestMethod.POST)

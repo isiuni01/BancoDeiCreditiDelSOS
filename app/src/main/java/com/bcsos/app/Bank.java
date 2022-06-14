@@ -29,6 +29,11 @@ public class Bank implements Serializable {
 	
 	public String newAccount(String name,String surname)
 	{
+		if(name == null || surname == null)
+		{
+			throw new NullPointerException("name o surname sono nulli");
+		}
+		
 		Account c = new Account(name, surname);
 		
 		

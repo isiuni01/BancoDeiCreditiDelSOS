@@ -2,10 +2,13 @@ package com.bcsos.app;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,12 +46,21 @@ public class Controller {
 	
 	
 	@GetMapping("/api/account")
-	public ArrayList<Account> getAllAccounts() {
-		return AppApplication.a;
+	public String getAllAccounts() {
+		return AppApplication.bank.getAllAccounts();
 	}
 	
 	@RequestMapping(value = "/api/account", method=RequestMethod.POST)
-	public void addAccount(@RequestBody String bodyContent) {
+	public ResponseEntity<String> addAccount(@RequestBody String bodyContent) {
+		Map<String, String> body = parseBody(bodyContent);
+		if(body != null) {
+			if(body.get("name") != null && body.get("surname") != null) {
+			String uuid = AppApplication.bank.newAccount(body.get("name"), body.get("surname"));
+				return new ResponseEntity<String>(uuid, HttpStatus.CREATED);
+			}
+		}
+		return new ResponseEntity<String>("Failed", HttpStatus.OK);
+		
 	}
 	
 	@RequestMapping(value="/api/account", method=RequestMethod.DELETE)

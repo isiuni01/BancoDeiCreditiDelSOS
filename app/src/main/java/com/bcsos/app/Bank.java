@@ -2,6 +2,7 @@ package com.bcsos.app;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,6 +35,7 @@ public class Bank implements Serializable {
 		this.mappa.put(id, c);
 		
 		return id.toString();
+		
 		
 	}
 	
@@ -68,6 +70,19 @@ public class Bank implements Serializable {
 		
 	}
 	
+	
+	public String getAllAccounts() {
+		String accounts = "";
+		for (Map.Entry<UUID, Account> entry : mappa.entrySet()) {
+			UUID key = entry.getKey();
+			Account val = entry.getValue();
+			String name = val.getName();
+			String surname = val.getSurname();
+			accounts += key.toString() + name + surname + "\n";
+		}
+		return accounts;
+	}
+	
 	public String transfer(String a1, String a2,double amount) throws BalanceException{
 		
 		
@@ -85,6 +100,7 @@ public class Bank implements Serializable {
 		
 	
 		}
+
 	
 	public String divert(String transactionId) throws BalanceException {
 		
@@ -94,24 +110,15 @@ public class Bank implements Serializable {
 		UUID a2 = t.getSender();
 		double amount = t.getAmount();
 		
-	
-		mappa.get(a1).transfer(amount * -1);
-		mappa.get(a2).transfer(amount);
+		UUID id =  UUID.randomUUID();
 		
-		 t = new Transaction(a1,a2,amount);
-		 
-		 UUID id = UUID.randomUUID();
-		 
-		 this.frasco.put(id, t);
-		 
-		 return id.toString();
+		t = new Transaction(a1,a2,amount);
 		
+		this.frasco.put(id, t);
 		
-		
-		
-	}
-		
+		return id.toString();
 		
 		
 	}
 	
+}

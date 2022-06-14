@@ -5,16 +5,13 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Rubrica implements Serializable {
+public class Bank implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private ConcurrentHashMap<UUID, Account> mappa;
 	
-	public Rubrica()
+	public Bank()
 	{
 		this.mappa = new ConcurrentHashMap<UUID, Account>();
 	}
@@ -39,11 +36,13 @@ public class Rubrica implements Serializable {
 		
 	}
 	
-	public void remoneAccount(String id) {
+	public void removeAccount(String id) {
 		
 		this.mappa.remove(UUID.fromString(id));
 		
 	}
+	
+	
 	
 	public Account getAccount(String id) {
 		
@@ -64,9 +63,11 @@ public class Rubrica implements Serializable {
 		
 		Account c = this.getAccount(id);
 		
-		c.setSername(surname);
+		c.setSurname(surname);
 		
 	}
+	
+	
 	
 	
 	

@@ -44,6 +44,15 @@
 			</tbody>
 			
 		</table>
+
+		<form>
+			<p> Nome : <input type="text" id="name1" value="ciao"> </p>
+			<p> Cognome : <input type="text" id="surname"> </p>
+			<p> <button  name="invio" value="Invio Dati" onclick="createAccount(name1.value, surname.value)">Crea Nuovo account </button> </p>
+		</form>
+		
+
+
 	</div>
 
 	<script>	
@@ -107,6 +116,21 @@ function deleteAccount(id)
         }
     });
 }
+
+function createAccount(name1,surname1)
+{
+	
+    $.post("/api/account",
+    {
+        name: name1,
+        surname: surname1,
+		success: function(result) {
+            window.location.reload();
+        }
+    })
+}
+
+
 
 
 </script>

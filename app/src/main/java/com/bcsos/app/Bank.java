@@ -103,6 +103,13 @@ public class Bank implements Serializable {
 	public String divert(String transactionId) throws BalanceException {
 
 		Transaction t = this.frasco.get(UUID.fromString(transactionId));
+		
+		
+		if(!t.canceled()) {
+			
+			return null; //o magari altro tommi fallo tu che almeno non piangi 
+			
+		}
 
 		UUID a1 = t.getRecipient();
 		UUID a2 = t.getSender();

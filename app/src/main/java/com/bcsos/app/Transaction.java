@@ -12,6 +12,7 @@ public class Transaction {
 	private UUID recipient;
 	private double amount;
 	private LocalDateTime date;
+	private boolean iscanceled;
 	
 	public Transaction(UUID sender, UUID recipient, double amount) {
 		this.sender = sender;
@@ -19,7 +20,24 @@ public class Transaction {
 		this.amount = amount;
 		DateTimeFormatter temp = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
 		date = LocalDateTime.now();  
+		this.iscanceled = false;
 	}
+
+	public boolean isIscanceled() {
+		return iscanceled;
+	}
+
+	public boolean canceled() {
+		
+		if(this.isIscanceled()) 
+			{
+				this.iscanceled = true;
+				return true;
+			}
+		return false;
+		}
+		
+	
 
 	public UUID getSender() {
 		return sender;

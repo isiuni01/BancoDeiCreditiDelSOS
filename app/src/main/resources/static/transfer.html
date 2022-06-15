@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Transfer</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+</head>
+<body>
+
+        <p> ID Mittente : <input type="text" id="idmittente"> </p>
+        <p> ID Destinatario : <input type="text" id="iddestinatario"> </p>
+        <p> Somma Denaro : <input type="text" id="amount"> </p>
+        <p> <button  name="invio" value="Invio Dati" onclick="Transfer(idmittente.value, iddestinatario.value, amount.value)">Invio Dati</button> </p>
+
+
+
+</body>
+
+<script>
+   function Transfer(idmittente, idDestinatario, denaro){
+    if((idmittente.length =! 20) || (idDestinatario.length =! 20 ))
+    {
+        alert("ID non validi");
+        return;
+    }
+
+    if(isNaN(denaro))
+    {
+        alert("Cifra non valida");
+        return;
+    }
+
+    $.post("/api/transfer",
+    {
+        from: idmittente,
+        to: idDestinatario,
+        amount: denaro
+    })
+
+}
+
+</script>
+</html>

@@ -13,8 +13,19 @@ public class AppApplication {
 		
 		bank = new Bank();
 		
-		bank.newAccount("Riccardo", "Berto");
-		bank.newAccount("Isi", "Bello");
+		String c = bank.newAccount("Riccardo", "Berto");
+		String c1 = bank.newAccount("Isi", "Bello");
+		
+		try {
+			bank.getAccount(c).transfer(100);
+			bank.transfer(c, c1, 50);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BalanceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 	}

@@ -22,11 +22,45 @@
 				</tr>
 			</thead>
 			<tbody id="elenco">
+			
+			
+			</tbody>
+			
+		</table>
+	</div>
+	
+		<div class="container">
+		<h2 id="titolo">Elenco Trasferimenti</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">ID Mittente</th>
+					<th scope="col">ID Destinatario</th>
+					<th scope="col">Importo</th>
+				</tr>
+			</thead>
+			<tbody id="elencoTransaction">
 			</tbody>
 			
 		</table>
 	</div>
 
+	<script>	
+		$.getJSON("http://localhost:8080/api/transaction", 	function(data, status)
+		{
+			var s = "";
+			
+			for(const element of data)
+			{
+				s = s+"<tr><td>"+element.id+"</td><td>"+element.sender+"</td><td>"+element.recipient +"</td><td>"+element.amount +"</td></tr>";
+			}
+		
+			document.getElementById("elencoTransaction").innerHTML = s;
+			
+		});
+	</script>
+	
 	<script>	
 		$.getJSON("http://localhost:8080/api/account", 	function(data, status)
 		{

@@ -1,5 +1,13 @@
 package com.bcsos.app;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @SpringBootApplication
 @RestController
@@ -56,6 +65,37 @@ public class Controller {
 		return list;
 	}
 	
+	@GetMapping("/api/transfer")
+	public String getTransferPage() throws URISyntaxException, IOException {
+		
+		URL res = getClass().getClassLoader().getResource("static/transfer.html");
+		File file = Paths.get(res.toURI()).toFile();
+		String absolutePath = file.getAbsolutePath();
+		BufferedReader reader = new BufferedReader(new FileReader (absolutePath));
+	    String         line = null;
+	    StringBuilder  stringBuilder = new StringBuilder();
+	    String         ls = System.getProperty("line.separator");
+
+	    try {
+	        while((line = reader.readLine()) != null) {
+	            stringBuilder.append(line);
+	            stringBuilder.append(ls);
+	        }
+
+	        return stringBuilder.toString();
+	    } finally {
+	        reader.close();
+	    }
+	}
+	
+	@GetMapping("/api/transaction")
+	public Object[] getAllTransaction() {
+		
+		Object[] list =  AppApplication.bank.getAllTransaction().values().toArray();
+		
+		return list;
+	}
+	
 	@RequestMapping(value = "/api/account", method=RequestMethod.POST)
 	public ResponseEntity<String> addAccount(@RequestBody String bodyContent) {
 		Map<String, String> body = parseBody(bodyContent);
@@ -70,10 +110,17 @@ public class Controller {
 	}
 	
 	@RequestMapping(value="/api/{accountId}", method=RequestMethod.DELETE)
-	public void deleteAccount(@PathVariable String accountId) {
+	public ResponseEntity<String> deleteAccount(@PathVariable String accountId) {
 		
-		AppApplication.bank.removeAccount(accountId);
-		
+		try {
+			
+			AppApplication.bank.removeAccount(accountId);
+			
+			return new ResponseEntity<String>("OK",HttpStatus.OK);
+			
+		} catch (IllegalArgumentException  e) {
+			return new ResponseEntity<String>("ERROR",HttpStatus.BAD_REQUEST);
+		}
 		
 	}
 	
@@ -108,6 +155,13 @@ public class Controller {
 	
 	@RequestMapping(value="/api/transfer", method=RequestMethod.POST)
 	public void transfer(@RequestBody String bodyContent) {
+		
+		Map<String, String> body = parseBody(bodyContent);
+		System.out.println(body.get("from"));
+		System.out.println(body.get("to"));
+		System.out.println(body.get("amount"));
+		
+		
 		
 	}
 	

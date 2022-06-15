@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.http.HttpStatus;
+
 public class Bank implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -41,7 +43,7 @@ public class Bank implements Serializable {
 
 	}
 
-	public void removeAccount(String id) throws IllegalArgumentException {
+	public void removeAccount(String id) throws IllegalArgumentException, NullPointerException {
 
 		UUID s = null;
 
@@ -114,6 +116,11 @@ public class Bank implements Serializable {
 
 		return id.toString();
 
+	}
+
+	public ConcurrentHashMap<UUID, Transaction>  getAllTransaction() {
+		
+		return frasco;
 	}
 
 }

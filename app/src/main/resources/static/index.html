@@ -46,10 +46,29 @@
 		</table>
 
 		<form>
-			<p> Nome : <input type="text" id="name1" value="ciao"> </p>
+			<p> Nome : <input type="text" id="name1"> </p>
 			<p> Cognome : <input type="text" id="surname"> </p>
 			<p> <button  name="invio" value="Invio Dati" onclick="createAccount(name1.value, surname.value)">Crea Nuovo account </button> </p>
 		</form>
+		
+		
+		<form>
+			<p> id : <input type="text" id="idaccount"> </p>
+			<p> <button  name="invioID" onclick="getInfo(idaccount.value)">Richiedi dati </button> </p>
+		</form>
+		
+		<h2 id="titolo">Dati account</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Nome</th>
+					<th scope="col">Cognome</th>
+					<th scope="col">Saldo</th>
+				</tr>
+			</thead>
+			<tbody id="Datiaccountrichiesto">
+			</tbody>
 		
 
 
@@ -68,6 +87,8 @@
 			document.getElementById("elencoTransaction").innerHTML = s;
 			
 		});
+		
+		
 	</script>
 	
 	<script>	
@@ -128,6 +149,22 @@ function createAccount(name1,surname1)
             window.location.reload();
         }
     })
+}
+
+function getInfo(id){
+
+	$.ajax({
+        url: '/api/account/'+id,
+
+        type: 'GET',
+        success: function(result) {
+            var s = "<tr><td>"+result.id+"</td><td>"+result.name+"</td><td>"+result.surname +"</td><td>"+result.balance +"</td></tr>";
+            document.getElementById("Datiaccountrichiesto").innerHTML = "ciao a tutti";
+        }
+    });
+
+
+  
 }
 
 

@@ -9,8 +9,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -33,9 +36,6 @@ import org.springframework.web.servlet.ModelAndView;
 @SpringBootApplication
 @RestController
 public class Controller {
-	public static void main(String[] args) {
-		//SpringApplication.run(Controller.class, args);
-	}
 	
 	public Map<String,String> parseBody(String bodyContent) {
 		Map<String, String> body = new HashMap<String, String>();
@@ -88,12 +88,36 @@ public class Controller {
 	    }
 	}
 	
-	@GetMapping("/api/transaction")
+	@GetMapping("/api/transaction") //aggiunta non richiesta
 	public Object[] getAllTransaction() {
 		
 		Object[] list =  AppApplication.bank.getAllTransaction().values().toArray();
 		
 		return list;
+	}
+	
+	@GetMapping("/api/transfer/{accountId}") //aggiunta non richiesta
+	public Object[] Transaction(@PathVariable String accountId) {
+		
+		Collection<com.bcsos.app.Transaction> map = AppApplication.bank.getAllTransaction().values();
+		
+		ArrayList<Transaction> arr = new ArrayList<Transaction>();
+		
+		for (Iterator iterator = map.iterator(); iterator.hasNext();) {
+			Transaction transaction = (Transaction) iterator.next();
+			
+			boolean b = transaction.getSender().compareTo(UUID.fromString(accountId)) == 0 || transaction.getRecipient().compareTo(UUID.fromString(accountId)) == 0;
+			
+			if(b)
+			{
+				arr.add(transaction);
+			}
+			
+		}
+		
+		Collections.sort((List)arr);
+		return arr.toArray();
+	
 	}
 	
 	@RequestMapping(value = "/api/account", method=RequestMethod.POST)
@@ -160,8 +184,6 @@ public class Controller {
 		System.out.println(body.get("from"));
 		System.out.println(body.get("to"));
 		System.out.println(body.get("amount"));
-		
-		
 		
 	}
 	

@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 
-public class Transaction {
+public class Transaction implements Comparable<Transaction> {
 	
 	private UUID id;
 	private UUID sender;
@@ -62,10 +62,14 @@ public class Transaction {
 	public void setId(UUID id) {
 		this.id = id;
 	}
+		
 	
-	
-	
-	
+	public int compareTo(Transaction compareT) {
+		
+        return this.getDate().compareTo(compareT.getDate());
+  
+    }
+  
 	
 	
 	

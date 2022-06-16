@@ -52,15 +52,16 @@
 		</form>
 		
 		
-		<form>
+		
 			<p> id : <input type="text" id="idaccount"> </p>
 			<p> <button  name="invioID" onclick="getInfo(idaccount.value)">Richiedi dati </button> </p>
-		</form>
+		
 		
 		<h2 id="titolo">Dati account</h2>
 		<table class="table">
 			<thead>
 				<tr>
+					
 					<th scope="col">ID</th>
 					<th scope="col">Nome</th>
 					<th scope="col">Cognome</th>
@@ -68,6 +69,22 @@
 				</tr>
 			</thead>
 			<tbody id="Datiaccountrichiesto">
+			</tbody>
+			
+			<h2 id="titolo">Dati account</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">ID Mittente</th>
+					<th scope="col">ID Destinatario</th>
+					<th scope="col">Importo</th>
+					<th scope="col">Data</th>
+					
+				</tr>
+			</thead>
+			<tbody id="Transazioni">
+			
 			</tbody>
 		
 
@@ -88,24 +105,22 @@
 			
 		});
 		
-		
-	</script>
-	
-	<script>	
 		$.getJSON("http://localhost:8080/api/account", 	function(data, status)
-		{
-			var s = "";
-			
-			for(const element of data)
-			{
-				s = s+"<tr><td>"+element.id+"</td><td>"+element.name+"</td><td>"+element.surname +"</td><td><button onclick=\"deleteAccount('"+element.id+"')\">Elimina </button> </td></tr>";
-			}
+				{
+					var s = "";
+					
+					for(const element of data)
+					{
+						s = s+"<tr><td>"+element.id+"</td><td>"+element.name+"</td><td>"+element.surname +"</td><td><button onclick=\"deleteAccount('"+element.id+"')\">Elimina </button> </td></tr>";
+					}
+				
+					document.getElementById("elenco").innerHTML = s;
+					
+				});
 		
-			document.getElementById("elenco").innerHTML = s;
-			
-		});
+		
 	</script>
-	
+		
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
 		crossorigin="anonymous"></script>
@@ -120,8 +135,7 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 		type="text/javascript"></script>
-		
-	
+			
 </body>
 <script>
 
@@ -158,8 +172,27 @@ function getInfo(id){
 
         type: 'GET',
         success: function(result) {
+        	
             var s = "<tr><td>"+result.id+"</td><td>"+result.name+"</td><td>"+result.surname +"</td><td>"+result.balance +"</td></tr>";
-            document.getElementById("Datiaccountrichiesto").innerHTML = "ciao a tutti";
+            document.getElementById("Datiaccountrichiesto").innerHTML = s;
+        }
+    });
+	
+	$.ajax({
+        url: '/api/transfer/'+id,
+
+        type: 'GET',
+        success: function(result) {
+        	
+            var s = "";
+			
+			for(const element of result)
+			{
+				s = "<tr><td>"+element.id+"</td><td>"+element.sender+"</td><td>"+element.recipient +"</td><td>"+element.amount +"</td><td>"+element.date +"</td></tr>";
+	            
+			}
+		
+			document.getElementById("Transazioni").innerHTML = s;
         }
     });
 

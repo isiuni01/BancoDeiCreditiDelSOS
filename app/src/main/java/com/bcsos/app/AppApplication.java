@@ -18,8 +18,13 @@ public class AppApplication {
 		
 		try {
 			bank.getAccount(c).transfer(100);
-			System.out.println(c);
+			
 			bank.transfer(c, c1, 50);
+			
+			bank.getAccount(c).transfer(100);
+			
+			bank.transfer(c, c1, 50);
+			
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

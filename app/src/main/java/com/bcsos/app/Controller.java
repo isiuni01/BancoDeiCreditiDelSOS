@@ -115,7 +115,8 @@ public class Controller {
 			
 		}
 		
-		Collections.sort((List)arr);
+		Collections.sort(arr);
+		Collections.reverse(arr);
 		return arr.toArray();
 	
 	}

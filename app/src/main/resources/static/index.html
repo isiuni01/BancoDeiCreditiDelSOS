@@ -58,42 +58,9 @@
 		
 			<div id = "ciao">
 
+			</div>		
 
-			</div>
-		
-		<!-- <h2 id="titolo">Dati account</h2>
-		<table class="table" >
-			<thead>
-				<tr>
-					
-					<th scope="col">ID</th>
-					<th scope="col">Nome</th>
-					<th scope="col">Cognome</th>
-					<th scope="col">Saldo</th>
-				</tr>
-			</thead>
-			<tbody id="Datiaccountrichiesto">
-			</tbody>
-			
-		</table>
-
-			<h2 id="titolo">Elenco Transazioni</h2>
-			<table class="table" >
-				<thead>
-					<tr>
-						<th scope="col">ID</th>
-						<th scope="col">ID Mittente</th>
-						<th scope="col">ID Destinatario</th>
-						<th scope="col">Importo</th>
-						<th scope="col">Data</th>
-						
-					</tr>
-				</thead>
-				<tbody id="Transazioni"></tbody>
-			</table> -->
-				
-
-	</div>
+	
 
 	<script>	
 		$.getJSON("http://localhost:8080/api/transaction", 	function(data, status)
@@ -223,12 +190,21 @@ function getInfo(id){
         type: 'GET',
         success: function(result) {
         	
-            var s = "";
+     	var s = "";
+     	var i = 0;
+	
 			
 			for(const element of result)
 			{
-				s = "<tr><td>"+element.id+"</td><td>"+element.sender+"</td><td>"+element.recipient +"</td><td>"+element.amount +"</td><td>"+element.date +"</td></tr>";
-	            
+				if(i == 0)
+				{
+					s = s + "<tr><td><b>"+element.id+"</b></td><td><b>"+element.sender+"</b></td><td><b>"+element.recipient +"</b></td><td><b>"+element.amount +"</b></td><td><b>"+element.date +"</b></td></tr>";
+				}else
+				{
+					s = s + "<tr><td>"+element.id+"</td><td>"+element.sender+"</td><td>"+element.recipient +"</td><td>"+element.amount +"</td><td>"+element.date +"</td></tr>";
+				}
+				
+	          i++;
 			}
 		
 			document.getElementById("Transazioni").innerHTML = s;

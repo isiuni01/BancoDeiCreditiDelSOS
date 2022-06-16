@@ -56,9 +56,13 @@
 			<p> id : <input type="text" id="idaccount"> </p>
 			<p> <button  name="invioID" onclick="getInfo(idaccount.value)">Richiedi dati </button> </p>
 		
+			<div id = "ciao">
+
+
+			</div>
 		
-		<h2 id="titolo">Dati account</h2>
-		<table class="table">
+		<!-- <h2 id="titolo">Dati account</h2>
+		<table class="table" >
 			<thead>
 				<tr>
 					
@@ -71,23 +75,23 @@
 			<tbody id="Datiaccountrichiesto">
 			</tbody>
 			
-			<h2 id="titolo">Dati account</h2>
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">ID</th>
-					<th scope="col">ID Mittente</th>
-					<th scope="col">ID Destinatario</th>
-					<th scope="col">Importo</th>
-					<th scope="col">Data</th>
-					
-				</tr>
-			</thead>
-			<tbody id="Transazioni">
-			
-			</tbody>
-		
+		</table>
 
+			<h2 id="titolo">Elenco Transazioni</h2>
+			<table class="table" >
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">ID Mittente</th>
+						<th scope="col">ID Destinatario</th>
+						<th scope="col">Importo</th>
+						<th scope="col">Data</th>
+						
+					</tr>
+				</thead>
+				<tbody id="Transazioni"></tbody>
+			</table> -->
+				
 
 	</div>
 
@@ -166,6 +170,41 @@ function createAccount(name1,surname1)
 }
 
 function getInfo(id){
+
+	var strVar="";
+	strVar += "<h2 id=\"titolo\">Dati account<\/h2>";
+	strVar += "		<table class=\"table\" >";
+	strVar += "			<thead>";
+	strVar += "				<tr>";
+	strVar += "					";
+	strVar += "					<th scope=\"col\">ID<\/th>";
+	strVar += "					<th scope=\"col\">Nome<\/th>";
+	strVar += "					<th scope=\"col\">Cognome<\/th>";
+	strVar += "					<th scope=\"col\">Saldo<\/th>";
+	strVar += "				<\/tr>";
+	strVar += "			<\/thead>";
+	strVar += "			<tbody id=\"Datiaccountrichiesto\">";
+	strVar += "			<\/tbody>";
+	strVar += "			";
+	strVar += "		<\/table>";
+	strVar += "";
+	strVar += "			<h2 id=\"titolo\">Elenco Transazioni<\/h2>";
+	strVar += "			<table class=\"table\" >";
+	strVar += "				<thead>";
+	strVar += "					<tr>";
+	strVar += "						<th scope=\"col\">ID<\/th>";
+	strVar += "						<th scope=\"col\">ID Mittente<\/th>";
+	strVar += "						<th scope=\"col\">ID Destinatario<\/th>";
+	strVar += "						<th scope=\"col\">Importo<\/th>";
+	strVar += "						<th scope=\"col\">Data<\/th>";
+	strVar += "						";
+	strVar += "					<\/tr>";
+	strVar += "				<\/thead>";
+	strVar += "				<tbody id=\"Transazioni\"><\/tbody>";
+	strVar += "			<\/table>";
+
+		document.getElementById("ciao").innerHTML = strVar;
+
 
 	$.ajax({
         url: '/api/account/'+id,

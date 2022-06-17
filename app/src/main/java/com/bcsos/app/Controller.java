@@ -2,7 +2,6 @@ package com.bcsos.app;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -13,14 +12,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +22,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 @SpringBootApplication
 @RestController
@@ -152,15 +145,44 @@ public class Controller {
 	@GetMapping("/api/account/{accountId}")
 	public Account getAccount(@PathVariable String accountId) {
 		
-		
-		
 		return AppApplication.bank.getAccount(accountId);
 		
 	}
 	
 	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.POST)
-	public void operazione(@RequestBody String bodyContent) {
-		
+	public ResponseEntity<String> operazione(@PathVariable String accountId, @RequestBody String bodyContent) {
+		Map<String, String> body = parseBody(bodyContent);
+		String transferId = "";
+		if(AppApplication.bank.getAccount(accountId) != null) {
+			if(body != null) {
+				if(body.get("amount") != null) {
+					double amount = Double.parseDouble(body.get("amount"));
+					if(amount == 0)
+						return new ResponseEntity<String>("Failed - amount should not be 0; Operation aborted", HttpStatus.OK);	
+					try {
+						transferId = AppApplication.bank.transfer(accountId, accountId, amount);
+					} catch (BalanceException e) {
+						return new ResponseEntity<String>("Failed - you don't have the funds to do that!", HttpStatus.OK);
+					} catch (Exception e) {
+						System.err.println("This should not happen...");
+						e.getMessage();
+						e.printStackTrace();
+					}
+					//TODO
+					//potremmo inserire un'altro blocco catch per AccountNotFoundException
+					//al posto che aggiungere il primo if(AppApplication.bank.getAccount(accountId) != null)
+					
+					//l'if iniziale ci da una migliore performance
+					//la gestionde dell'eccezione probabilmente una migliore leggibilità
+					String message = "TransferId: " + transferId + "\n";
+					message += "Balance: " + AppApplication.bank.getAccount(accountId).getBalance();
+					return new ResponseEntity<String>(message, HttpStatus.OK);
+				}
+				return new ResponseEntity<String>("Failed - amount is null", HttpStatus.OK);
+			}
+			return new ResponseEntity<String>("Failed - error occurred while parsing the body; Check your request body", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("Failed - the accountId seems to not exist; It should be something like this 72e6a2e7-5cd2-4fe4-a57d-7231587247ea", HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.PUT)

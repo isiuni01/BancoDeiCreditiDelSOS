@@ -84,20 +84,27 @@ public class Bank implements Serializable {
 		return mappa;
 	}
 
-	public String transfer(String a1, String a2, double amount) throws BalanceException {
+	public String transfer(String a1, String a2, double amount) throws Exception {	
+		if(a1 != null && a2 != null) {
+			if(mappa.get(UUID.fromString(a1)) != null && mappa.get(UUID.fromString(a2)) != null) {
+				if(!a1.equals(a2)) {
+					mappa.get(UUID.fromString(a1)).transfer(amount * -1);
+					mappa.get(UUID.fromString(a2)).transfer(amount);
+				} else {
+					mappa.get(UUID.fromString(a2)).transfer(amount);
+				}
+				Transaction t = new Transaction(UUID.fromString(a1), UUID.fromString(a2), amount);
 
-		mappa.get(UUID.fromString(a1)).transfer(amount * -1);
-		mappa.get(UUID.fromString(a2)).transfer(amount);
+				UUID id = UUID.randomUUID();
 
-		Transaction t = new Transaction(UUID.fromString(a1), UUID.fromString(a2), amount);
+				this.frasco.put(id, t);
+				t.setId(id);
 
-		UUID id = UUID.randomUUID();
-
-		this.frasco.put(id, t);
-		t.setId(id);
-
-		return id.toString();
-
+				return id.toString();
+			}
+			throw new AccountNotFoundException("[FATAL ERROR] Not both accountIds are valid");
+		}
+		throw new IllegalArgumentException("[FATAL ERROR] null values are not accepted");
 	}
 
 	public String divert(String transactionId) throws BalanceException {

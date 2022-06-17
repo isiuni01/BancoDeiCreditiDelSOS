@@ -42,7 +42,6 @@
 			</thead>
 			<tbody id="elencoTransaction">
 			</tbody>
-			
 		</table>
 
 		<form>
@@ -51,16 +50,12 @@
 			<p> <button  name="invio" value="Invio Dati" onclick="createAccount(name1.value, surname.value)">Crea Nuovo account </button> </p>
 		</form>
 		
-		
-		
 			<p> id : <input type="text" id="idaccount"> </p>
 			<p> <button  name="invioID" onclick="getInfo(idaccount.value)">Richiedi dati </button> </p>
 		
 			<div id = "ciao">
 
 			</div>		
-
-	
 
 	<script>	
 		$.getJSON("http://localhost:8080/api/transaction", 	function(data, status)
@@ -91,6 +86,8 @@
 		
 		
 	</script>
+	
+	<p><a href="/transfer" target="_blank">clicca qui per effettuare un trasferimento</a></p>
 		
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -137,6 +134,12 @@ function createAccount(name1,surname1)
 }
 
 function getInfo(id){
+	
+    if(id.length =! 20)
+    {
+        alert("ID non valido");
+        return;
+    }
 
 	var strVar="";
 	strVar += "<h2 id=\"titolo\">Dati account<\/h2>";

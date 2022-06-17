@@ -65,7 +65,7 @@ public class Controller {
 		return list;
 	}
 	
-	@GetMapping("/api/transfer")
+	@GetMapping("/transfer")
 	public String getTransferPage() throws URISyntaxException, IOException {
 		
 		URL res = getClass().getClassLoader().getResource("static/transfer.html");

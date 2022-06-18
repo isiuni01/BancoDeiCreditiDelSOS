@@ -1,7 +1,6 @@
 package com.bcsos.app;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 
@@ -18,7 +17,7 @@ public class Transaction implements Comparable<Transaction> {
 		this.sender = sender;
 		this.recipient = recipient;
 		this.amount = amount;
-		DateTimeFormatter temp = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+//		DateTimeFormatter temp = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
 		date = LocalDateTime.now();  
 		this.iscanceled = false;
 	}

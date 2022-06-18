@@ -26,10 +26,10 @@ public class AppApplication {
 			bank.transfer(c, c1, 50);
 			
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BalanceException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		

@@ -152,8 +152,6 @@ public class Controller {
 	@GetMapping("/api/account/{accountId}")
 	public Account getAccount(@PathVariable String accountId) {
 		
-		
-		
 		return AppApplication.bank.getAccount(accountId);
 		
 	}

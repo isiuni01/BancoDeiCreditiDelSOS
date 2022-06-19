@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpHeaders;
 
 @SpringBootApplication
 @RestController
@@ -143,10 +144,19 @@ public class Controller {
 	}
 	
 	@GetMapping("/api/account/{accountId}")
-	public Account getAccount(@PathVariable String accountId) {
+	public ResponseEntity<String> getAccount(@PathVariable String accountId) {
 		
-		return AppApplication.bank.getAccount(accountId);
-		
+		if(AppApplication.bank.getAccount(accountId) != null) {
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("X-Sistema-Bancario",
+		    		String.join(";",
+		    				AppApplication.bank.getAccount(accountId).getName(),
+		    				AppApplication.bank.getAccount(accountId).getSurname()));
+			String message = AppApplication.bank.getAccount(accountId).toString();
+			message += AppApplication.bank.getAllTransaction();
+			return new ResponseEntity<String>(message, headers, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 	}
 	
 	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.POST)
@@ -158,7 +168,7 @@ public class Controller {
 				if(body.get("amount") != null) {
 					double amount = Double.parseDouble(body.get("amount"));
 					if(amount == 0)
-						return new ResponseEntity<String>("Failed - amount should not be 0; Operation aborted", HttpStatus.OK);	
+						return new ResponseEntity<String>("Failed - amount should not be 0", HttpStatus.OK);
 					try {
 						transferId = AppApplication.bank.transfer(accountId, accountId, amount);
 					} catch (BalanceException e) {
@@ -178,26 +188,58 @@ public class Controller {
 					message += "Balance: " + AppApplication.bank.getAccount(accountId).getBalance();
 					return new ResponseEntity<String>(message, HttpStatus.OK);
 				}
-				return new ResponseEntity<String>("Failed - amount is null", HttpStatus.OK);
+				return new ResponseEntity<String>("Failed - amount is null", HttpStatus.BAD_REQUEST);
 			}
-			return new ResponseEntity<String>("Failed - error occurred while parsing the body; Check your request body", HttpStatus.OK);
+			return new ResponseEntity<String>("Failed - error occurred while parsing the body; Check your request body", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("Failed - the accountId seems to not exist; It should be something like this 72e6a2e7-5cd2-4fe4-a57d-7231587247ea", HttpStatus.OK);
+		return new ResponseEntity<String>("Failed - the accountId seems to not exist; It should be something like this 72e6a2e7-5cd2-4fe4-a57d-7231587247ea", HttpStatus.NOT_FOUND);
 	}
 	
 	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.PUT)
-	public void updateAccountInformations(@PathVariable String accountId, @RequestBody String bodyContent) {
-		
+	public ResponseEntity<String> updateAccountInformations(@PathVariable String accountId, @RequestBody String bodyContent) {
+		Map<String, String> body = parseBody(bodyContent);
+		if(AppApplication.bank.getAccount(accountId) != null) {
+			if(body != null) {
+				if (body.get("name") != null && body.get("surname") != null) {
+					AppApplication.bank.getAccount(accountId).setName(body.get("name"));
+					AppApplication.bank.getAccount(accountId).setSurname(body.get("surname"));
+					return new ResponseEntity<String>(HttpStatus.OK);
+				}
+				return new ResponseEntity<String>("Failed - body arguments name and surname must be set", HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<String>("Failed - error occurred while parsing the body; Check your request body", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 	}
 	
 	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.PATCH)
-	public void updateSingleInformation(@PathVariable String accountId, @RequestBody String bodyContent) {
-		
+	public ResponseEntity<String> updateSingleInformation(@PathVariable String accountId, @RequestBody String bodyContent) {
+		Map<String, String> body = parseBody(bodyContent);
+		if(AppApplication.bank.getAccount(accountId) != null) {
+			if(body != null) {
+				if (body.get("name") != null && body.get("surname") == null) {
+					AppApplication.bank.getAccount(accountId).setName(body.get("name"));
+				} else if (body.get("name") == null && body.get("surname") != null){
+					AppApplication.bank.getAccount(accountId).setSurname(body.get("surname"));
+				} else
+					return new ResponseEntity<String>("Failed - body arguments name or (exclusive) surname must be set", HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<String>("Failed - error occurred while parsing the body; Check your request body", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 	}
 	
 	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.HEAD)
-	public void getInformazioni(@PathVariable String accountId) {
-		
+	public ResponseEntity<String> getInformazioni(@PathVariable String accountId) {
+		if(AppApplication.bank.getAccount(accountId) != null) {
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("X-Sistema-Bancario",
+		    		String.join(";",
+		    				AppApplication.bank.getAccount(accountId).getName(),
+		    				AppApplication.bank.getAccount(accountId).getSurname()));
+		    return new ResponseEntity<String>(headers, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 	}
 	
 	@RequestMapping(value="/api/transfer", method=RequestMethod.POST)

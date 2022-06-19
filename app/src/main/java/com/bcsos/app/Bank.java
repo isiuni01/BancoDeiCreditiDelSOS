@@ -22,9 +22,7 @@ public class Bank implements Serializable {
 	}
 
 	public String toString() {
-
 		return mappa.toString();
-
 	}
 
 	public String newAccount(String name, String surname) {

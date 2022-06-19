@@ -61,16 +61,9 @@ public class Account {
 	public double getBalance() {
 		return balance;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "Account [id=" + id + ", name=" + name + ", surname=" + surname + ", balance=" + balance + "]";
+	}	
 }

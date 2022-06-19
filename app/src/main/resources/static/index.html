@@ -17,9 +17,6 @@
 		  </a>
 		</div>
 		<span class="navbar-text mx-2">
-			<a href="login.html">Login</a>
-		</span>
-		<span class="navbar-text mx-2">
 			<a href="register.html">Register</a>
 		</span>
 	  </nav>
@@ -195,6 +192,7 @@ function getInfo(id){
         type: 'GET',
         success: function(result) {
         	
+        	result = JSON.parse(result);
             var s = "<tr><td>"+result.id+"</td><td>"+result.name+"</td><td>"+result.surname +"</td><td>"+result.balance +"</td></tr>";
             document.getElementById("Datiaccountrichiesto").innerHTML = s;
         }

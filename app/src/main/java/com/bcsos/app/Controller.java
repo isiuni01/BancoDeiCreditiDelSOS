@@ -15,7 +15,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
+import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.HttpHeaders;
 
 @SpringBootApplication
 @RestController
@@ -43,6 +44,12 @@ public class Controller {
 		    }
 		  }
 		return body;
+	}
+	
+	private String errorJSON(String error) {
+		JSONObject o = new JSONObject();
+		o.put("error", error);
+		return o.toString();
 	}
 	
 	@GetMapping("/hello")
@@ -152,9 +159,12 @@ public class Controller {
 		    		String.join(";",
 		    				AppApplication.bank.getAccount(accountId).getName(),
 		    				AppApplication.bank.getAccount(accountId).getSurname()));
-			String message = AppApplication.bank.getAccount(accountId).toString();
-			message += AppApplication.bank.getAllTransaction();
-			return new ResponseEntity<String>(message, headers, HttpStatus.OK);
+			JSONObject message = new JSONObject();
+			message.put("balance", AppApplication.bank.getAccount(accountId).getBalance());
+			message.put("surname", AppApplication.bank.getAccount(accountId).getSurname());
+			message.put("name", AppApplication.bank.getAccount(accountId).getName());
+			message.put("id", AppApplication.bank.getAccount(accountId).getId());
+			return new ResponseEntity<String>(message.toString(), headers, HttpStatus.OK);
 		}
 		return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 	}
@@ -168,11 +178,11 @@ public class Controller {
 				if(body.get("amount") != null) {
 					double amount = Double.parseDouble(body.get("amount"));
 					if(amount == 0)
-						return new ResponseEntity<String>("Failed - amount should not be 0", HttpStatus.OK);
+						return new ResponseEntity<String>(errorJSON("amount should not be 0"), HttpStatus.OK);
 					try {
 						transferId = AppApplication.bank.transfer(accountId, accountId, amount);
 					} catch (BalanceException e) {
-						return new ResponseEntity<String>("Failed - you don't have the funds to do that!", HttpStatus.OK);
+						return new ResponseEntity<String>(errorJSON("insufficent balance"), HttpStatus.OK);
 					} catch (Exception e) {
 						System.err.println("This should not happen...");
 						e.getMessage();
@@ -188,11 +198,11 @@ public class Controller {
 					message += "Balance: " + AppApplication.bank.getAccount(accountId).getBalance();
 					return new ResponseEntity<String>(message, HttpStatus.OK);
 				}
-				return new ResponseEntity<String>("Failed - amount is null", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<String>(errorJSON("amount is null"), HttpStatus.BAD_REQUEST);
 			}
-			return new ResponseEntity<String>("Failed - error occurred while parsing the body; Check your request body", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(errorJSON("something is wrong with the body of the request"), HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("Failed - the accountId seems to not exist; It should be something like this 72e6a2e7-5cd2-4fe4-a57d-7231587247ea", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<String>(errorJSON("the accountId seems to not exist; It should be something like this 72e6a2e7-5cd2-4fe4-a57d-7231587247ea"), HttpStatus.NOT_FOUND);
 	}
 	
 	@RequestMapping(value="/api/account/{accountId}", method=RequestMethod.PUT)
@@ -203,11 +213,11 @@ public class Controller {
 				if (body.get("name") != null && body.get("surname") != null) {
 					AppApplication.bank.getAccount(accountId).setName(body.get("name"));
 					AppApplication.bank.getAccount(accountId).setSurname(body.get("surname"));
-					return new ResponseEntity<String>(HttpStatus.OK);
+					return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
 				}
-				return new ResponseEntity<String>("Failed - body arguments name and surname must be set", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<String>(errorJSON("body arguments name and surname must be set"), HttpStatus.BAD_REQUEST);
 			}
-			return new ResponseEntity<String>("Failed - error occurred while parsing the body; Check your request body", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(errorJSON("something is wrong with the body of the request"), HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 	}
@@ -222,9 +232,10 @@ public class Controller {
 				} else if (body.get("name") == null && body.get("surname") != null){
 					AppApplication.bank.getAccount(accountId).setSurname(body.get("surname"));
 				} else
-					return new ResponseEntity<String>("Failed - body arguments name or (exclusive) surname must be set", HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<String>(errorJSON("body arguments name or (exclusive) surname must be set"), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(HttpStatus.OK);
 			}
-			return new ResponseEntity<String>("Failed - error occurred while parsing the body; Check your request body", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(errorJSON("something is wrong with the body of the request"), HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 	}
@@ -243,17 +254,45 @@ public class Controller {
 	}
 	
 	@RequestMapping(value="/api/transfer", method=RequestMethod.POST)
-	public void transfer(@RequestBody String bodyContent) {
-		
+	public ResponseEntity<String> transfer(@RequestBody String bodyContent) {
 		Map<String, String> body = parseBody(bodyContent);
-		System.out.println(body.get("from"));
-		System.out.println(body.get("to"));
-		System.out.println(body.get("amount"));
-		
+		if(body != null) {
+			if(body.get("from") != null && body.get("to") != null && body.get("amount") != null) {
+				try {
+					double amount = Double.parseDouble(body.get("amount"));
+					AppApplication.bank.transfer(body.get("from"), body.get("to"), amount);
+				} catch (BalanceException e) {
+					return new ResponseEntity<String>(errorJSON("insufficent balance in the sender account"), HttpStatus.OK);
+				} catch (AccountNotFoundException e) {
+					return new ResponseEntity<String>(errorJSON("not both accountIds are valid"), HttpStatus.OK);
+				} catch (Exception e) {
+					System.err.println("[FATAL ERROR] this shouldn't happen!");
+					e.getClass();
+					e.printStackTrace();
+					return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+				return new ResponseEntity<String>(HttpStatus.OK);
+			}
+			return new ResponseEntity<String>(errorJSON("body arguments from, to and amount must be set"), HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>(errorJSON("something is wrong with the body of the request"), HttpStatus.BAD_REQUEST);
 	}
 	
 	@RequestMapping(value="/api/divert", method=RequestMethod.POST)
-	public void divert(@RequestBody String bodyContent) {
-		
+	public ResponseEntity<String> divert(@RequestBody String bodyContent) {
+		Map<String, String> body = parseBody(bodyContent);
+		if(body != null) {
+			if(body.get("id") != null) {
+				try {
+					AppApplication.bank.divert(body.get("id"));
+				} catch (BalanceException e) {
+					return new ResponseEntity<String>(errorJSON("insufficent balance in the sender account"), HttpStatus.ACCEPTED);
+				} catch (AccountNotFoundException e) {
+					return new ResponseEntity<String>(errorJSON("not both accountIds are valid"), HttpStatus.OK);
+				}
+			}
+			return new ResponseEntity<String>(errorJSON("body argument id must be set"), HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>(errorJSON("something is wrong with the body of the request"), HttpStatus.BAD_REQUEST);
 	}
 }

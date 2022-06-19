@@ -24,7 +24,7 @@
             <img class="rounded mx-auto d-block" src="images/logo.png" alt="" width="90" height="90">
         </div>
         <div class="border border-5 rounded p-3 m-3 bg-warning">
-            <form>
+            <form accept-charset="utf-8">
                 <div class="mb-3">
                   <label for="nome" class="form-label">Nome</label>
                   <input type="text" class="form-control" id="nome" aria-describedby="nome">
@@ -55,15 +55,13 @@
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
 		type="text/javascript"></script>
     <script>
+
     function createAccount(name, surname) {
-        $.post("/api/account",
-        {
-            name: name,
-            surname: surname,
-            success: function(result) {
-                window.location.replace("index.html")
-            }
-        })
+      data = {
+        name: name,
+        surname: surname
+      }
+      $.post("/api/account", data)
     }
     </script>
 </body>

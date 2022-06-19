@@ -105,33 +105,25 @@ public class Bank implements Serializable {
 		throw new IllegalArgumentException("[FATAL ERROR] null values are not accepted");
 	}
 
-	public String divert(String transactionId) throws BalanceException {
-
-		Transaction t = this.frasco.get(UUID.fromString(transactionId));
-		
-		
-		if(!t.canceled()) {
-			
-			return null; //o magari altro tommi fallo tu che almeno non piangi 
-			
+	public String divert(String transactionId) throws BalanceException, AccountNotFoundException {
+		if(this.frasco.get(UUID.fromString(transactionId)) != null) {
+			Transaction t = this.frasco.get(UUID.fromString(transactionId));	//transaction to divert
+			if (!t.isCanceled()) {	//if transaction is not been diverted yet
+				UUID recipient = t.getRecipient();
+				UUID sender = t.getSender();
+				double amount = t.getAmount();
+				UUID id = UUID.randomUUID();
+				
+				t = new Transaction(recipient, sender, amount);	//create a new transaction, with the recipient sending back to the sender
+				
+				this.frasco.put(id, t);	//add transaction to the bank registry
+				return id.toString();
+			}
 		}
-
-		UUID a1 = t.getRecipient();
-		UUID a2 = t.getSender();
-		double amount = t.getAmount();
-
-		UUID id = UUID.randomUUID();
-
-		t = new Transaction(a1, a2, amount);
-
-		this.frasco.put(id, t);
-
-		return id.toString();
-
+		throw new AccountNotFoundException("[FATAL ERROR] Not both accountIds are valid");
 	}
 
 	public ConcurrentHashMap<UUID, Transaction>  getAllTransaction() {
-		
 		return frasco;
 	}
 

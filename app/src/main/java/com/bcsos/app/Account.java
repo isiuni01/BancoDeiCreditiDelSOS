@@ -25,7 +25,7 @@ public class Account implements Serializable {
 		{
 			if(balance < Math.abs(amount))
 			{
-				throw new BalanceException();
+				throw new BalanceException("your balance is not sufficent");
 			}
 			
 			this.balance = this.balance + amount;

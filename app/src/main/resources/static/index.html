@@ -54,48 +54,16 @@
 			</tbody>
 		</table>
 
-		<form>
 			<p> Nome : <input type="text" id="name1"> </p>
 			<p> Cognome : <input type="text" id="surname"> </p>
-			<p> <button  name="invio" value="Invio Dati" onclick="createAccount(name1.value, surname.value)">Crea Nuovo account </button> </p>
-		</form>
+			<p> <button  name="invio" onclick="createAccount(name1.value, surname.value)">Crea Nuovo account </button> </p>
 		
 			<p> id : <input type="text" id="idaccount"> </p>
 			<p> <button  name="invioID" onclick="getInfo(idaccount.value)">Richiedi dati </button> </p>
 		
 			<div id = "ciao">
 
-			</div>		
-
-	<script>	
-		$.getJSON("http://localhost:8080/api/transaction", 	function(data, status)
-		{
-			var s = "";
-			
-			for(const element of data)
-			{
-				s = s+"<tr><td>"+element.id+"</td><td>"+element.sender+"</td><td>"+element.recipient +"</td><td>"+element.amount +"</td></tr>";
-			}
-		
-			document.getElementById("elencoTransaction").innerHTML = s;
-			
-		});
-		
-		$.getJSON("http://localhost:8080/api/account", 	function(data, status)
-				{
-					var s = "";
-					
-					for(const element of data)
-					{
-						s = s+"<tr><td>"+element.id+"</td><td>"+element.name+"</td><td>"+element.surname +"</td><td><button onclick=\"deleteAccount('"+element.id+"')\">Elimina </button> </td></tr>";
-					}
-				
-					document.getElementById("elenco").innerHTML = s;
-					
-				});
-		
-		
-	</script>
+			</div>
 	
 	<p><a href="/transfer" target="_blank">clicca qui per effettuare un trasferimento</a></p>
 		
@@ -116,6 +84,35 @@
 			
 </body>
 <script>
+function getAllTransactions() {
+	$.getJSON("http://localhost:8080/api/transaction", 	function(data, status)
+			{
+				var s = "";
+				
+				for(const element of data)
+				{
+					s = s+"<tr><td>"+element.id+"</td><td>"+element.sender+"</td><td>"+element.recipient +"</td><td>"+element.amount +"</td></tr>";
+				}
+			
+				document.getElementById("elencoTransaction").innerHTML = s;
+				
+			});
+}
+
+function getAllAccounts() {
+	$.getJSON("http://localhost:8080/api/account", 	function(data, status)
+			{
+				var s = "";
+				
+				for(const element of data)
+				{
+					s = s+"<tr><td>"+element.id+"</td><td>"+element.name+"</td><td>"+element.surname +"</td><td><button onclick=\"deleteAccount('"+element.id+"')\">Elimina </button> </td></tr>";
+				}
+			
+				document.getElementById("elenco").innerHTML = s;
+				
+			});
+}
 
 function deleteAccount(id)
 {
@@ -125,7 +122,7 @@ function deleteAccount(id)
 
         type: 'DELETE',
         success: function(result) {
-            window.location.reload();
+            getAllAccounts();
         }
     });
 }
@@ -138,7 +135,7 @@ function createAccount(name1,surname1)
         name: name1,
         surname: surname1,
 		success: function(result) {
-            window.location.reload();
+            getAllAccounts();
         }
     })
 }
@@ -191,8 +188,7 @@ function getInfo(id){
 
         type: 'GET',
         success: function(result) {
-        	
-        	result = JSON.parse(result);
+        		
             var s = "<tr><td>"+result.id+"</td><td>"+result.name+"</td><td>"+result.surname +"</td><td>"+result.balance +"</td></tr>";
             document.getElementById("Datiaccountrichiesto").innerHTML = s;
         }
@@ -230,7 +226,8 @@ function getInfo(id){
 }
 
 
-
+getAllAccounts();
+getAllTransactions();
 
 </script>
 </html>

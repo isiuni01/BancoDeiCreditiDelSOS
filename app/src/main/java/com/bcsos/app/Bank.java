@@ -96,7 +96,7 @@ public class Bank implements Serializable {
 				UUID id = UUID.randomUUID();
 
 				this.frasco.put(id, t);
-				t.setId(id);
+				t.setId(id);	//questa operazione dovrebbe essere eseguita da Transaction, senza la possibilità di set
 
 				return id.toString();
 			}

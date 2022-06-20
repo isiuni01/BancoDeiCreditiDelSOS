@@ -131,7 +131,7 @@ public class Controller {
 				return new ResponseEntity<String>(uuid, HttpStatus.CREATED);
 			}
 		}
-		return new ResponseEntity<String>("Failed", HttpStatus.OK);
+		return new ResponseEntity<String>(errorJSON("something is wrong with the body of the request"), HttpStatus.BAD_REQUEST);
 		
 	}
 	

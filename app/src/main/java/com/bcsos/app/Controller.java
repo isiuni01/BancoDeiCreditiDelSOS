@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpHeaders;
@@ -69,7 +70,8 @@ public class Controller {
 	
 	@GetMapping("/api/account")
 	public ResponseEntity<String> getAllAccounts() {
-		JSONObject message = new JSONObject(AppApplication.bank.getAllAccounts().values());
+//		JSONObject message = new JSONObject(AppApplication.bank.getAllAccounts());
+		JSONArray message = new JSONArray(AppApplication.bank.getAllAccounts().values().toArray());
 		return new ResponseEntity<String>(message.toString(), HttpStatus.OK);
 	}
 	

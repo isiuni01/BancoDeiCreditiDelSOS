@@ -14,6 +14,7 @@ public class Transaction implements Comparable<Transaction> {
 	private boolean canceled;
 	
 	public Transaction(UUID sender, UUID recipient, double amount) {
+		this.id = UUID.randomUUID();
 		this.sender = sender;
 		this.recipient = recipient;
 		this.amount = amount;
@@ -52,25 +53,9 @@ public class Transaction implements Comparable<Transaction> {
 
 	public UUID getId() {
 		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
-		
+	}		
 	
-	public int compareTo(Transaction compareT) {
-        return this.getDate().compareTo(compareT.getDate());
+	public int compareTo(Transaction other) {
+        return this.getDate().compareTo(other.getDate());
     }
-  
-	
-	
-	
-	
-	
-	
-	
-
-
-
 }

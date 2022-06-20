@@ -11,6 +11,7 @@ public class Account {
 	
 	
 	public Account(String name, String surname) {
+		this.id = UUID.randomUUID();
 		this.name = name;
 		this.surname = surname;
 		this.balance = 0;
@@ -52,10 +53,6 @@ public class Account {
 	
 	public UUID getId() {
 		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public double getBalance() {

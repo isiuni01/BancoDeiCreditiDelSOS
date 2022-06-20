@@ -12,11 +12,9 @@ public class AppApplication {
 		SpringApplication.run(AppApplication.class, args);
 		
 		try {
+			bank = (Bank) Bank.load();
 			
-			bank = Bank.load();
-			
-		}catch(Exception e)
-		{
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		

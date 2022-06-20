@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public class Transaction implements Comparable<Transaction>, Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private UUID id;
 	private UUID sender;
 	private UUID recipient;

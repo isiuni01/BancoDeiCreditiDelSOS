@@ -69,7 +69,7 @@ public class Controller {
 	
 	@GetMapping("/api/account")
 	public ResponseEntity<String> getAllAccounts() {
-		JSONObject message = new JSONObject(AppApplication.bank.getAllAccounts());
+		JSONObject message = new JSONObject(AppApplication.bank.getAllAccounts().values());
 		return new ResponseEntity<String>(message.toString(), HttpStatus.OK);
 	}
 	

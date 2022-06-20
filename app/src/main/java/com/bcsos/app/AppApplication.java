@@ -11,27 +11,18 @@ public class AppApplication {
 		
 		SpringApplication.run(AppApplication.class, args);
 		
-		bank = new Bank();
-		
-		String c = bank.newAccount("Riccardo", "Berto");
-		String c1 = bank.newAccount("Isi", "Bello");
-		
 		try {
-			bank.getAccount(c).transfer(100);
 			
-			bank.transfer(c, c1, 50);
+			bank = Bank.load();
 			
-			bank.getAccount(c).transfer(100);
-			
-			bank.transfer(c, c1, 50);
-			
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (BalanceException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
+		}catch(Exception e)
+		{
 			e.printStackTrace();
 		}
+		
+		
+		
+		
 		
 		
 	}

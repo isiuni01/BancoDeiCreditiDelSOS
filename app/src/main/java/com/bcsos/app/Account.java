@@ -1,8 +1,9 @@
 package com.bcsos.app;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Account {
+public class Account implements Serializable {
 
 	private UUID id;
 	private String name;

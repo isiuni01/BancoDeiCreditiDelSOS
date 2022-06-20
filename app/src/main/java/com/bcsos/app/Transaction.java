@@ -1,10 +1,11 @@
 package com.bcsos.app;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 
-public class Transaction implements Comparable<Transaction> {
+public class Transaction implements Comparable<Transaction>, Serializable {
 	
 	private UUID id;
 	private UUID sender;
@@ -18,7 +19,6 @@ public class Transaction implements Comparable<Transaction> {
 		this.sender = sender;
 		this.recipient = recipient;
 		this.amount = amount;
-//		DateTimeFormatter temp = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
 		date = LocalDateTime.now();  
 		this.canceled = false;
 	}

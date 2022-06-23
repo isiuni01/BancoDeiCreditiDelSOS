@@ -63,14 +63,8 @@ public class Controller {
 		return o.toString();
 	}
 
-	@GetMapping("/hello")
-	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return String.format("Hello %s!", name);
-	}
-
 	@GetMapping("/api/account")
 	public ResponseEntity<String> getAllAccounts() {
-//		JSONObject message = new JSONObject(AppApplication.bank.getAllAccounts());
 		JSONArray message = new JSONArray(AppApplication.bank.getAllAccounts().values().toArray());
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Type", "application/json");

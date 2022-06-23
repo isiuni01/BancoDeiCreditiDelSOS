@@ -1,5 +1,6 @@
 package com.bcsos.app;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.boot.SpringApplication;
@@ -15,23 +16,35 @@ public class AppApplication {
 		
 		try {
 			bank = (Bank) Bank.load();
-			
-//			bank = new Bank();
-//			
-//			String s =bank.newAccount("berto", "Il profe");
-//			
-//			String u = bank.newAccount("isa", "Il bello");
-//			
-//			bank.transfer(u, u, 50);
-//			
-//			bank.transfer(u, s, 20);
-//			
-//			bank.saveState();
-			
-			
-			
 		} catch(Exception e) {
-			e.printStackTrace();
+			bank = new Bank();
+			
+			String s =bank.newAccount("Tommaso", "Rocca");
+			
+			String u = bank.newAccount("Isaia","Del Rosso");
+			
+			try {
+				bank.transfer(u, u, 50);
+				bank.transfer(u, s, 20);
+				
+				try {
+					bank.saveState();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			} catch (IllegalArgumentException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (AccountNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (BalanceException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
 		}
 		
 		

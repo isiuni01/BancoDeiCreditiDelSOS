@@ -29,7 +29,7 @@ public class Transaction implements Comparable<Transaction>, Serializable {
 	}
 
 	public boolean cancel() {
-		if(this.isCanceled()) {
+		if(!this.isCanceled()) {
 			this.canceled = true;
 			return true;
 		}

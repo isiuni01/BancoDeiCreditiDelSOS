@@ -51,14 +51,16 @@ public class Bank implements Serializable {
 		if (id == null)
 			throw new IllegalArgumentException("[FATAL ERROR] id is null");
 		
+	
+
+		this.mappa.remove(UUID.fromString(id));
+		
 		try {
 			this.saveState();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		this.mappa.remove(UUID.fromString(id));
 	}
 
 	public Account getAccount(String id) throws IllegalArgumentException {
@@ -106,7 +108,9 @@ public class Bank implements Serializable {
 	public String transfer(String a1, String a2, double amount) throws AccountNotFoundException, IllegalArgumentException, BalanceException {
 		if(a1 == null || a2 == null)
 			throw new IllegalArgumentException("[FATAL ERROR] sender, recipient or amount are null");
-		if(mappa.get(UUID.fromString(a1)) == null && mappa.get(UUID.fromString(a2)) == null)
+		
+		if(mappa.get(UUID.fromString(a1)) == null || mappa.get(UUID.fromString(a2)) == null)
+			
 			throw new AccountNotFoundException("[FATAL ERROR] Not both accountIds are valid");
 		
 		if(!a1.equals(a2)) {
@@ -145,8 +149,11 @@ public class Bank implements Serializable {
 		UUID sender = t.getSender();
 		double amount = t.getAmount();
 		UUID id = UUID.randomUUID();
+		t.cancel();
 		
 		t = new Transaction(recipient, sender, amount);	//create a new transaction, with the recipient sending back to the sender
+		
+		
 		
 		this.frasco.put(id, t);	//add transaction to the bank registry
 		

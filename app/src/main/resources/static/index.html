@@ -19,54 +19,95 @@
 		<span class="navbar-text mx-2">
 			<a href="register.html">Register</a>
 		</span>
-	  </nav>
-	<div class="container">
-		<h2 id="titolo">Elenco Conti</h2>
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">ID</th>
-					<th scope="col">Nome</th>
-					<th scope="col">Cognome</th>
-					<th scope="col"></th>
-				</tr>
-			</thead>
-			<tbody id="elenco">
-			
-			
-			</tbody>
-			
-		</table>
-	</div>
-	
+	</nav>
+	<main class="container">
 		<div class="container">
-		<h2 id="titolo">Elenco Trasferimenti</h2>
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">ID</th>
-					<th scope="col">ID Mittente</th>
-					<th scope="col">ID Destinatario</th>
-					<th scope="col">Importo</th>
-				</tr>
-			</thead>
-			<tbody id="elencoTransaction">
-			</tbody>
-		</table>
-
-			<p> Nome : <input type="text" id="name1"> </p>
-			<p> Cognome : <input type="text" id="surname"> </p>
-			<p> <button  name="invio" onclick="createAccount(name1.value, surname.value)">Crea Nuovo account </button> </p>
-		
-			<p> id : <input type="text" id="idaccount"> </p>
-			<p> <button  name="invioID" onclick="getInfo(idaccount.value)">Richiedi dati </button> </p>
-		
-			<div id = "ciao">
-
+			<h3 id="all-accounts">Elenco Conti</h3>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">Nome</th>
+						<th scope="col">Cognome</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody id="dati-all-accounts">
+				</tbody>
+			</table>
+		</div>
+		<div class="container">
+			<h3 id="all-transactions">Elenco Trasferimenti</h3>
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						<th scope="col">ID Mittente</th>
+						<th scope="col">ID Destinatario</th>
+						<th scope="col">Importo</th>
+					</tr>
+				</thead>
+				<tbody id="dati-all-transactions">
+				</tbody>
+			</table>
+		</div>
+		<div class="container">
+			<h3>Crea Account</h3>
+			<div class="form mb-3">
+				<div class="mb-3">
+					<label class="form-label" for="name1">Nome </label>
+					<input class="form-control" type="text" id="name1">
+				</div>
+				<div class="mb-3">
+					<label class="form-label" for="surname">Cognome </label>
+					<input class="form-control" type="text" id="surname">
+				</div>
+				<button class="btn btn-primary" name="invio" onclick="createAccount(name1.value, surname.value)">Crea Nuovo account</button>
 			</div>
-	
-	<p><a href="/transfer" target="_blank">clicca qui per effettuare un trasferimento</a></p>
-		
+			<h3>Richiedi dati account</h3>
+			<div class="form mb-3">
+				<div class="mb-3">
+					<label class="form-label" for="idaccount">Account ID</label>
+					<input class="form-control" type="text" id="idaccount">
+				</div>
+				<button class="btn btn-primary" name="invioID" onclick="getInfo(idaccount.value)">Richiedi dati</button>
+			</div>
+			<div id="tabella-richieste" class="d-none">
+				<h3 id="titolo">Dati account</h3>
+				<table class="table" >
+					<thead>
+						<tr>
+							
+							<th scope="col">ID</th>
+							<th scope="col">Nome</th>
+							<th scope="col">Cognome</th>
+							<th scope="col">Saldo</th>
+						</tr>
+					</thead>
+					<tbody id="dati-account">
+					</tbody>
+					
+				</table>
+				<h3 id="titolo">Elenco Transazioni</h3>
+				<table class="table" >
+					<thead>
+						<tr>
+							<th scope="col">ID</th>
+							<th scope="col">ID Mittente</th>
+							<th scope="col">ID Destinatario</th>
+							<th scope="col">Importo</th>
+							<th scope="col">Data</th>
+							
+						</tr>
+					</thead>
+					<tbody id="dati-transazioni"></tbody>
+				</table>
+			</div>
+		</div>
+		<span>
+			<a href="/transfer" target="_blank">clicca qui per effettuare un trasferimento</a>
+		</span>
+	</main>
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
 		crossorigin="anonymous"></script>
@@ -85,41 +126,41 @@
 </body>
 <script>
 function getAllTransactions() {
-	$.getJSON("http://localhost:8080/api/transaction", 	function(data, status)
-			{
-				var s = "";
-				
-				for(const element of data)
-				{
-					s = s+"<tr><td>"+element.id+"</td><td>"+element.sender+"</td><td>"+element.recipient +"</td><td>"+element.amount +"</td></tr>";
+	$.getJSON("http://localhost:8080/api/transaction", 	function(data, status) {
+				var content = "";
+
+				for(const element of data) {
+					content ="<tr><td>"+element.id+"</td><td>";
+					content += element.sender+"</td><td>";
+					content += element.recipient +"</td><td>";
+					content += element.amount +"</td></tr>";
 				}
 			
-				document.getElementById("elencoTransaction").innerHTML = s;
+				document.getElementById("dati-all-transactions").innerHTML = content;
 				
 			});
 }
 
 function getAllAccounts() {
-	$.getJSON("http://localhost:8080/api/account", 	function(data, status)
-			{
-				var s = "";
+	$.getJSON("http://localhost:8080/api/account", 	function(data, status) {
+				var content = "";
 				
-				for(const element of data)
-				{
-					s = s+"<tr><td>"+element.id+"</td><td>"+element.name+"</td><td>"+element.surname +"</td><td><button onclick=\"deleteAccount('"+element.id+"')\">Elimina </button> </td></tr>";
+				for(const element of data) {
+					content += "<tr><td>"+element.id+"</td><td>";
+					content += element.name+"</td><td>";
+					content+=element.surname+"</td><td>";
+					content += "<button class=\"btn btn-danger\" onclick=\"deleteAccount('"+element.id+"')\">Elimina</button></td></tr>";
 				}
 			
-				document.getElementById("elenco").innerHTML = s;
+				document.getElementById("dati-all-accounts").innerHTML = content;
 				
 			});
 }
 
-function deleteAccount(id)
-{
+function deleteAccount(id) {
 	
     $.ajax({
         url: '/api/'+id,
-
         type: 'DELETE',
         success: function(result) {
             getAllAccounts();
@@ -127,8 +168,7 @@ function deleteAccount(id)
     });
 }
 
-function createAccount(name1,surname1)
-{
+function createAccount(name1,surname1) {
 	
     $.post("/api/account",
     {
@@ -142,61 +182,22 @@ function createAccount(name1,surname1)
 
 function getInfo(id){
 	
-    if(id.length =! 20)
-    {
+    if(id.length =! 20) {
         alert("ID non valido");
         return;
     }
-
-	var strVar="";
-	strVar += "<h2 id=\"titolo\">Dati account<\/h2>";
-	strVar += "		<table class=\"table\" >";
-	strVar += "			<thead>";
-	strVar += "				<tr>";
-	strVar += "					";
-	strVar += "					<th scope=\"col\">ID<\/th>";
-	strVar += "					<th scope=\"col\">Nome<\/th>";
-	strVar += "					<th scope=\"col\">Cognome<\/th>";
-	strVar += "					<th scope=\"col\">Saldo<\/th>";
-	strVar += "				<\/tr>";
-	strVar += "			<\/thead>";
-	strVar += "			<tbody id=\"Datiaccountrichiesto\">";
-	strVar += "			<\/tbody>";
-	strVar += "			";
-	strVar += "		<\/table>";
-	strVar += "";
-	strVar += "			<h2 id=\"titolo\">Elenco Transazioni<\/h2>";
-	strVar += "			<table class=\"table\" >";
-	strVar += "				<thead>";
-	strVar += "					<tr>";
-	strVar += "						<th scope=\"col\">ID<\/th>";
-	strVar += "						<th scope=\"col\">ID Mittente<\/th>";
-	strVar += "						<th scope=\"col\">ID Destinatario<\/th>";
-	strVar += "						<th scope=\"col\">Importo<\/th>";
-	strVar += "						<th scope=\"col\">Data<\/th>";
-	strVar += "						";
-	strVar += "					<\/tr>";
-	strVar += "				<\/thead>";
-	strVar += "				<tbody id=\"Transazioni\"><\/tbody>";
-	strVar += "			<\/table>";
-
-		document.getElementById("ciao").innerHTML = strVar;
-
-
 	$.ajax({
         url: '/api/account/'+id,
-
         type: 'GET',
         success: function(result) {
         		
             var s = "<tr><td>"+result.id+"</td><td>"+result.name+"</td><td>"+result.surname +"</td><td>"+result.balance +"</td></tr>";
-            document.getElementById("Datiaccountrichiesto").innerHTML = s;
+            document.getElementById("dati-account").innerHTML = s;
         }
     });
 	
 	$.ajax({
         url: '/api/transfer/'+id,
-
         type: 'GET',
         success: function(result) {
         	
@@ -217,7 +218,7 @@ function getInfo(id){
 	          i++;
 			}
 		
-			document.getElementById("Transazioni").innerHTML = s;
+			document.getElementById("dati-transazioni").innerHTML = s;
         }
     });
 

@@ -103,8 +103,15 @@ public class Controller {
 	}
 
 	@GetMapping("/api/transfer/{accountId}") // aggiunta non richiesta
-	public ResponseEntity<String> Transaction(@PathVariable String accountId) {
+	public ResponseEntity<String> transaction(@PathVariable String accountId) {
 
+		try {
+			if (AppApplication.bank.getAccount(accountId) == null)
+				return new ResponseEntity<String>(errorJSON("account not found"), HttpStatus.NOT_FOUND);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<String>(errorJSON("account not found") ,HttpStatus.NOT_FOUND);
+		}
+		
 		Collection<com.bcsos.app.Transaction> map = AppApplication.bank.getAllTransaction().values();
 
 		ArrayList<Transaction> arr = new ArrayList<Transaction>();

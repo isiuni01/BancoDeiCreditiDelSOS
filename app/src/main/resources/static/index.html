@@ -16,9 +16,6 @@
 			<img src="images/logo.png" alt="" width="30" height="30">
 		  </a>
 		</div>
-		<span class="navbar-text mx-2">
-			<a href="register.html">Register</a>
-		</span>
 	</nav>
 	<main class="container">
 		<div class="container">
@@ -182,6 +179,11 @@ function createAccount(name1,surname1) {
 
 function getInfo(id){
 	
+	//clean the table
+	document.getElementById("dati-account").innerHTML = "";
+	document.getElementById("dati-transazioni").innerHTML = "";
+
+	//check id
     if(id.length =! 20) {
         alert("ID non valido");
         return;
@@ -200,32 +202,25 @@ function getInfo(id){
         url: '/api/transfer/'+id,
         type: 'GET',
         success: function(result) {
-        	
-     	var s = "";
-     	var i = 0;
-	
-			
-			for(const element of result)
-			{
-				if(i == 0)
-				{
+			var s = "";
+			var i = 0;
+				
+			for(const element of result) {
+				if(i == 0) {
 					s = s + "<tr><td><b>"+element.id+"</b></td><td><b>"+element.sender+"</b></td><td><b>"+element.recipient +"</b></td><td><b>"+element.amount +"</b></td><td><b>"+element.date +"</b></td></tr>";
-				}else
-				{
+				} else {
 					s = s + "<tr><td>"+element.id+"</td><td>"+element.sender+"</td><td>"+element.recipient +"</td><td>"+element.amount +"</td><td>"+element.date +"</td></tr>";
 				}
-				
-	          i++;
+				i++;
 			}
-		
+
 			document.getElementById("dati-transazioni").innerHTML = s;
         }
     });
 
-
+	$("#tabella-richieste").removeClass("d-none");
   
 }
-
 
 getAllAccounts();
 getAllTransactions();

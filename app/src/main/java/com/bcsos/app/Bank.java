@@ -9,9 +9,6 @@ import java.io.Serializable;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-//TODO
-//add UUID check
-
 public class Bank implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -30,7 +27,7 @@ public class Bank implements Serializable {
 
 	public String newAccount(String name, String surname) throws IllegalArgumentException{
 		if (name == null || surname == null || name.length() == 0 || surname.length() == 0)
-			throw new IllegalArgumentException("[FATAL ERROR] name or surname are null");
+			throw new IllegalArgumentException("name or surname are null");
 
 		Account a = new Account(name, surname);
 		this.mappa.put(a.getId(), a);
@@ -39,7 +36,6 @@ public class Bank implements Serializable {
 		try {
 			this.saveState();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -49,7 +45,7 @@ public class Bank implements Serializable {
 
 	public void removeAccount(String id) throws IllegalArgumentException {
 		if (id == null)
-			throw new IllegalArgumentException("[FATAL ERROR] id is null");
+			throw new IllegalArgumentException("id is null");
 		
 	
 
@@ -58,21 +54,20 @@ public class Bank implements Serializable {
 		try {
 			this.saveState();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public Account getAccount(String id) throws IllegalArgumentException {
 		if (id == null)
-			throw new IllegalArgumentException("[FATAL ERROR] id is null");
+			throw new IllegalArgumentException("id is null");
 
 		return this.mappa.get(UUID.fromString(id));
 	}
 
 	public void updateName(String id, String name) throws IllegalArgumentException, AccountNotFoundException {
 		if(id == null || name == null || name.length() == 0)
-			throw new IllegalArgumentException("[FATAL ERROR] name or name are null");
+			throw new IllegalArgumentException("name or name are null");
 		
 		Account c = this.getAccount(id);
 		c.setName(name);
@@ -80,14 +75,13 @@ public class Bank implements Serializable {
 		try {
 			this.saveState();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public void updateSurname(String id, String surname) throws IllegalArgumentException, AccountNotFoundException {
 		if(id == null || surname == null || surname.length() == 0)
-			throw new IllegalArgumentException("[FATAL ERROR] name or surname are null");
+			throw new IllegalArgumentException("name or surname are null");
 			
 		Account c = this.getAccount(id);
 		c.setSurname(surname);
@@ -95,7 +89,6 @@ public class Bank implements Serializable {
 		try {
 			this.saveState();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -107,11 +100,11 @@ public class Bank implements Serializable {
 
 	public String transfer(String a1, String a2, double amount) throws AccountNotFoundException, IllegalArgumentException, BalanceException {
 		if(a1 == null || a2 == null)
-			throw new IllegalArgumentException("[FATAL ERROR] sender, recipient or amount are null");
+			throw new IllegalArgumentException("sender, recipient or amount are null");
 		
 		if(mappa.get(UUID.fromString(a1)) == null || mappa.get(UUID.fromString(a2)) == null)
 			
-			throw new AccountNotFoundException("[FATAL ERROR] Not both accountIds are valid");
+			throw new AccountNotFoundException("Not both accountIds are valid");
 		
 		if(!a1.equals(a2)) {
 			mappa.get(UUID.fromString(a1)).transfer(amount * -1);
@@ -126,7 +119,6 @@ public class Bank implements Serializable {
 		try {
 			this.saveState();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -136,9 +128,9 @@ public class Bank implements Serializable {
 
 	public String divert(String transactionId) throws BalanceException, AccountNotFoundException, IllegalArgumentException {
 		if(transactionId == null)
-			throw new IllegalArgumentException("[FATAL ERROR] transactionId is null");
+			throw new IllegalArgumentException("transactionId is null");
 		if(this.frasco.get(UUID.fromString(transactionId)) == null)
-			throw new AccountNotFoundException("[FATAL ERROR] transactionId is not valid");
+			throw new AccountNotFoundException("transactionId is not valid");
 		
 		Transaction t = this.frasco.get(UUID.fromString(transactionId));	//transaction to divert
 		
@@ -160,7 +152,6 @@ public class Bank implements Serializable {
 		try {
 			this.saveState();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

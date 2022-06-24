@@ -21,20 +21,13 @@ public class Account implements Serializable {
 	
 	public void transfer(double amount) throws BalanceException {
 		
-		if(amount < 0)
-		{
+		if(amount < 0) {
 			if(balance < Math.abs(amount))
-			{
 				throw new BalanceException("your balance is not sufficent");
-			}
-			
 			this.balance = this.balance + amount;
-		}else {
-			
+		} else {
 			this.balance = this.balance + amount;
-			
 		}
-		
 	}
 
 	public String getName() {
